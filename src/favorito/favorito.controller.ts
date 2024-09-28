@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, HttpException, HttpStatus } from '@nestjs/common';
 import { FavoritoService } from './favorito.service';
 import { CreateFavoritoDto } from './dto/create-favorito.dto';
 import { UpdateFavoritoDto } from './dto/update-favorito.dto';
@@ -8,27 +8,80 @@ export class FavoritoController {
   constructor(private readonly favoritoService: FavoritoService) {}
 
   @Post()
-  create(@Body() createFavoritoDto: CreateFavoritoDto) {
-    return this.favoritoService.create(createFavoritoDto);
+  @UsePipes(new ValidationPipe())
+  async create(@Body() createFavoritoDto: CreateFavoritoDto) {
+    try {
+      const favorito = await this.favoritoService.create(createFavoritoDto);
+      return {
+        statusCode: HttpStatus.CREATED,
+        message: 'Favorito creado exitosamente',
+        data: favorito,
+      };
+    } catch (error) {
+      throw new HttpException('Error al crear el favorito', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get()
-  findAll() {
-    return this.favoritoService.findAll();
+  async findAll() {
+    try {
+      const favoritos = await this.favoritoService.findAll();
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Favoritos recuperados exitosamente',
+        data: favoritos,
+      };
+    } catch (error) {
+      throw new HttpException('Error al recuperar los favoritos', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.favoritoService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    try {
+      const favorito = await this.favoritoService.findOne(+id);
+      if (!favorito) {
+        throw new HttpException('Favorito no encontrado', HttpStatus.NOT_FOUND);
+      }
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Favorito recuperado exitosamente',
+        data: favorito,
+      };
+    } catch (error) {
+      throw new HttpException('Error al recuperar el favorito', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFavoritoDto: UpdateFavoritoDto) {
-    return this.favoritoService.update(+id, updateFavoritoDto);
+  @UsePipes(new ValidationPipe())
+  async update(@Param('id') id: string, @Body() updateFavoritoDto: UpdateFavoritoDto) {
+    try {
+      const [numberOfAffectedRows, [updatedFavorito]] = await this.favoritoService.update(+id, updateFavoritoDto);
+      if (numberOfAffectedRows === 0) {
+        throw new HttpException('Favorito no encontrado o sin cambios', HttpStatus.NOT_FOUND);
+      }
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Favorito actualizado exitosamente',
+        data: updatedFavorito,
+      };
+    } catch (error) {
+      throw new HttpException('Error al actualizar el favorito', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.favoritoService.remove(+id);
+  async remove(@Param('id') id: string) {
+    try {
+      await this.favoritoService.remove(+id);
+      return {
+        statusCode: HttpStatus.NO_CONTENT,
+        message: 'Favorito eliminado exitosamente',
+      };
+    } catch (error) {
+      throw new HttpException('Error al eliminar el favorito', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
+

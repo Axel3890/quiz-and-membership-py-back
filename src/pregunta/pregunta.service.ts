@@ -1,26 +1,51 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { CreatePreguntaDto } from './dto/create-pregunta.dto';
 import { UpdatePreguntaDto } from './dto/update-pregunta.dto';
+import { Pregunta } from './entities/pregunta.entity';
 
 @Injectable()
 export class PreguntaService {
-  create(createPreguntaDto: CreatePreguntaDto) {
-    return 'This action adds a new pregunta';
+  constructor(
+    @Inject('PREGUNTA_REPOSITORY')
+    private readonly preguntaRepository: typeof Pregunta,
+  ) {}
+
+  async create(createPreguntaDto: CreatePreguntaDto): Promise<Pregunta> {
+    return this.preguntaRepository.create({
+      id_subtema: createPreguntaDto.id_subtema,
+      year: createPreguntaDto.year,
+      texto_pregunta: createPreguntaDto.texto_pregunta,
+    });
   }
 
-  findAll() {
-    return `This action returns all pregunta`;
+
+  async findAll(): Promise<Pregunta[]> {
+    return this.preguntaRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} pregunta`;
+  async findOne(id: number): Promise<Pregunta> {
+    return this.preguntaRepository.findByPk(id);
   }
 
-  update(id: number, updatePreguntaDto: UpdatePreguntaDto) {
-    return `This action updates a #${id} pregunta`;
+  async update(id_pregunta: number, updatePreguntaDto: UpdatePreguntaDto): Promise<[number, Pregunta[]]> {
+    return this.preguntaRepository.update(
+      {
+        id_subtema: updatePreguntaDto.id_subtema,
+        year: updatePreguntaDto.year,
+        texto_pregunta: updatePreguntaDto.texto_pregunta,
+      },
+      {
+        where: { id_pregunta },
+        returning: true,
+      },
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} pregunta`;
+  async remove(id_pregunta: number): Promise<void> {
+    const pregunta = await this.preguntaRepository.findByPk(id_pregunta);
+    if (!pregunta) {
+      throw new Error('Pregunta no encontrada');
+    }
+    await pregunta.destroy();
   }
 }

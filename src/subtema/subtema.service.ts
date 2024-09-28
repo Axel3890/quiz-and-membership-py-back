@@ -1,26 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+import { Subtema } from './entities/subtema.entity';
 import { CreateSubtemaDto } from './dto/create-subtema.dto';
 import { UpdateSubtemaDto } from './dto/update-subtema.dto';
 
 @Injectable()
 export class SubtemaService {
-  create(createSubtemaDto: CreateSubtemaDto) {
-    return 'This action adds a new subtema';
+  constructor(
+    @Inject('SUBTEMA_REPOSITORY')
+    private subtemaRepository: typeof Subtema,
+  ) {}
+
+  async create(createSubtemaDto: CreateSubtemaDto): Promise<Subtema> {
+    return this.subtemaRepository.create({
+      nombre_subtema: createSubtemaDto.nombre_subtema,
+      id_tema: createSubtemaDto.id_tema,
+    });
   }
 
-  findAll() {
-    return `This action returns all subtema`;
+  async findAll(): Promise<Subtema[]> {
+    return this.subtemaRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} subtema`;
+  async findOne(id: number): Promise<Subtema> {
+    return this.subtemaRepository.findByPk(id);
   }
 
-  update(id: number, updateSubtemaDto: UpdateSubtemaDto) {
-    return `This action updates a #${id} subtema`;
+  async update(id: number, updateSubtemaDto: UpdateSubtemaDto): Promise<[number, Subtema[]]> {
+    return this.subtemaRepository.update(
+      {
+        nombre_subtema: updateSubtemaDto.nombre_subtema,
+        id_tema: updateSubtemaDto.id_tema,
+      },
+      {
+        where: { id },
+        returning: true,
+      }
+    );
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} subtema`;
+  async remove(id: number): Promise<void> {
+    const subtema = await this.findOne(id);
+    await subtema.destroy();
   }
 }

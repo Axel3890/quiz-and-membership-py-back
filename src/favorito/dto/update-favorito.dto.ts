@@ -1,4 +1,14 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateFavoritoDto } from './create-favorito.dto';
 
-export class UpdateFavoritoDto extends PartialType(CreateFavoritoDto) {}
+import { IsOptional, IsDateString } from 'class-validator';
+
+export class UpdateFavoritoDto {
+  @IsOptional()
+  id_user?: number;
+
+  @IsOptional()
+  id_pregunta?: number;
+
+  @IsOptional()
+  @IsDateString()
+  fecha_agregado?: Date;
+}

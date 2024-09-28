@@ -1,26 +1,50 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { CreateFavoritoDto } from './dto/create-favorito.dto';
 import { UpdateFavoritoDto } from './dto/update-favorito.dto';
+import { Favorito } from './entities/favorito.entity';
 
 @Injectable()
 export class FavoritoService {
-  create(createFavoritoDto: CreateFavoritoDto) {
-    return 'This action adds a new favorito';
+  constructor(
+    @Inject('FAVORITO_REPOSITORY')
+    private readonly favoritoRepository: typeof Favorito,
+  ) {}
+
+  async create(createFavoritoDto: CreateFavoritoDto): Promise<Favorito> {
+    return this.favoritoRepository.create({
+      id_user: createFavoritoDto.id_user,
+      id_pregunta: createFavoritoDto.id_pregunta,
+      fecha_agregado: createFavoritoDto.fecha_agregado,
+    });
   }
 
-  findAll() {
-    return `This action returns all favorito`;
+  async findAll(): Promise<Favorito[]> {
+    return this.favoritoRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} favorito`;
+  async findOne(id_favorito: number): Promise<Favorito> {
+    return this.favoritoRepository.findByPk(id_favorito);
   }
 
-  update(id: number, updateFavoritoDto: UpdateFavoritoDto) {
-    return `This action updates a #${id} favorito`;
+  async update(id_favorito: number, updateFavoritoDto: UpdateFavoritoDto): Promise<[number, Favorito[]]> {
+    return this.favoritoRepository.update(
+      {
+        id_user: updateFavoritoDto.id_user,
+        id_pregunta: updateFavoritoDto.id_pregunta,
+        fecha_agregado: updateFavoritoDto.fecha_agregado,
+      },
+      {
+        where: { id_favorito },
+        returning: true,
+      },
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} favorito`;
+  async remove(id_favorito: number): Promise<void> {
+    const favorito = await this.favoritoRepository.findByPk(id_favorito);
+    if (!favorito) {
+      throw new Error('Favorito no encontrado');
+    }
+    await favorito.destroy();
   }
 }

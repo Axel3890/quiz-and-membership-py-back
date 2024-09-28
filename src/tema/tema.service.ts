@@ -1,26 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+import { Tema } from './entities/tema.entity';
 import { CreateTemaDto } from './dto/create-tema.dto';
 import { UpdateTemaDto } from './dto/update-tema.dto';
 
 @Injectable()
 export class TemaService {
-  create(createTemaDto: CreateTemaDto) {
-    return 'This action adds a new tema';
+  constructor(
+    @Inject('TEMA_REPOSITORY')
+    private temaRepository: typeof Tema,
+  ) {}
+
+  async create(createTemaDto: CreateTemaDto): Promise<Tema> {
+    return this.temaRepository.create({
+      nombre_tema: createTemaDto.nombre_tema,
+      id_modulo: createTemaDto.id_modulo,
+    });
+  }
+  async findAll(): Promise<Tema[]> {
+    return this.temaRepository.findAll();
   }
 
-  findAll() {
-    return `This action returns all tema`;
+  async findOne(id: number): Promise<Tema> {
+    return this.temaRepository.findByPk(id);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tema`;
+  async update(id: number, updateTemaDto: UpdateTemaDto): Promise<[number, Tema[]]> {
+    return this.temaRepository.update(
+      {
+        nombre_tema: updateTemaDto.nombre_tema,
+        id_modulo: updateTemaDto.id_modulo,
+      },
+      {
+        where: { id },
+        returning: true,
+      }
+    );
   }
 
-  update(id: number, updateTemaDto: UpdateTemaDto) {
-    return `This action updates a #${id} tema`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} tema`;
+  async remove(id: number): Promise<void> {
+    const tema = await this.findOne(id);
+    await tema.destroy();
   }
 }

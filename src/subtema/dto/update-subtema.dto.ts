@@ -1,4 +1,11 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateSubtemaDto } from './create-subtema.dto';
+import { IsOptional, IsString, IsInt } from 'class-validator';
 
-export class UpdateSubtemaDto extends PartialType(CreateSubtemaDto) {}
+export class UpdateSubtemaDto {
+  @IsOptional()
+  @IsString()
+  readonly nombre_subtema?: string;
+
+  @IsOptional()
+  @IsInt()
+  readonly id_tema?: number;
+}

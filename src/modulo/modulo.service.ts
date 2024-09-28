@@ -1,26 +1,45 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+import { Modulo } from './entities/modulo.entity';
 import { CreateModuloDto } from './dto/create-modulo.dto';
 import { UpdateModuloDto } from './dto/update-modulo.dto';
 
 @Injectable()
 export class ModuloService {
-  create(createModuloDto: CreateModuloDto) {
-    return 'This action adds a new modulo';
+  constructor(
+    @Inject('MODULO_REPOSITORY')
+    private moduloRepository: typeof Modulo,
+  ) {}
+
+  async create(createModuloDto: CreateModuloDto): Promise<Modulo> {
+    return this.moduloRepository.create({
+      nombre_modulo: createModuloDto.nombre_modulo,
+      imagen: createModuloDto.imagen,
+    });
   }
 
-  findAll() {
-    return `This action returns all modulo`;
+  async findAll(): Promise<Modulo[]> {
+    return this.moduloRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} modulo`;
+  async findOne(id: number): Promise<Modulo> {
+    return this.moduloRepository.findByPk(id);
   }
 
-  update(id: number, updateModuloDto: UpdateModuloDto) {
-    return `This action updates a #${id} modulo`;
+  async update(id: number, updateModuloDto: UpdateModuloDto): Promise<[number, Modulo[]]> {
+    return this.moduloRepository.update(
+      {
+        nombre_modulo: updateModuloDto.nombre_modulo,
+        imagen: updateModuloDto.imagen,
+      },
+      {
+        where: { id },
+        returning: true,
+      }
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} modulo`;
+  async remove(id: number): Promise<void> {
+    const modulo = await this.findOne(id);
+    await modulo.destroy();
   }
 }
