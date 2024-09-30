@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -12,68 +12,99 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10); 
+    try {
+      const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
-    return this.userRepository.create({
-      username: createUserDto.username,
-      nombre: createUserDto.nombre,
-      apellido: createUserDto.apellido,
-      email: createUserDto.email,
-      password: hashedPassword,  
-      role: createUserDto.role,
-      fecha_registro: new Date(),
-    });
+      return await this.userRepository.create({
+        username: createUserDto.username,
+        nombre: createUserDto.nombre,
+        apellido: createUserDto.apellido,
+        email: createUserDto.email,
+        password: hashedPassword,
+        role: createUserDto.role,
+        fecha_registro: new Date(),
+      });
+    } catch (error) {
+      console.error('Error al crear el usuario:', error.message);
+      throw new HttpException(error.message || 'Error al crear el usuario', HttpStatus.BAD_REQUEST);
+    }
   }
-
 
   async findAll(): Promise<User[]> {
-    return this.userRepository.findAll();
+    try {
+      return await this.userRepository.findAll();
+    } catch (error) {
+      console.error('Error al recuperar los usuarios:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar los usuarios', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
-
 
   async findOne(id_user: number): Promise<User> {
-    return this.userRepository.findByPk(id_user);
+    try {
+      const user = await this.userRepository.findByPk(id_user);
+      if (!user) {
+        console.error('Usuario no encontrado');
+        throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
+      }
+      return user;
+    } catch (error) {
+      console.error('Error al recuperar el usuario:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar el usuario', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-
   async update(id_user: number, updateUserDto: UpdateUserDto): Promise<[number, User[]]> {
-    const updateData: Partial<User> = {
-      username: updateUserDto.username,
-      nombre: updateUserDto.nombre,
-      apellido: updateUserDto.apellido,
-      email: updateUserDto.email,
-      role: updateUserDto.role,
-    };
+    try {
+      const updateData: Partial<User> = {
+        username: updateUserDto.username,
+        nombre: updateUserDto.nombre,
+        apellido: updateUserDto.apellido,
+        email: updateUserDto.email,
+        role: updateUserDto.role,
+      };
 
-    if (updateUserDto.password) {
-      updateData.password = await bcrypt.hash(updateUserDto.password, 10); 
+      if (updateUserDto.password) {
+        updateData.password = await bcrypt.hash(updateUserDto.password, 10);
+      }
+
+      return await this.userRepository.update(updateData, {
+        where: { id_user },
+        returning: true,
+      });
+    } catch (error) {
+      console.error('Error al actualizar el usuario:', error.message);
+      throw new HttpException(error.message || 'Error al actualizar el usuario', HttpStatus.BAD_REQUEST);
     }
-
-    return this.userRepository.update(updateData, {
-      where: { id_user },
-      returning: true,
-    });
   }
 
   async remove(id_user: number): Promise<void> {
-    const user = await this.userRepository.findByPk(id_user);
-    if (!user) {
-      throw new Error('Usuario no encontrado');
+    try {
+      const user = await this.userRepository.findByPk(id_user);
+      if (!user) {
+        console.error('Usuario no encontrado');
+        throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
+      }
+      await user.destroy();
+    } catch (error) {
+      console.error('Error al eliminar el usuario:', error.message);
+      throw new HttpException(error.message || 'Error al eliminar el usuario', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    await user.destroy();
   }
 
-
   async validatePassword(email: string, password: string): Promise<boolean> {
-    const user = await this.userRepository.findOne({ where: { email } });
+    try {
+      const user = await this.userRepository.findOne({ where: { email } });
+      if (!user) {
+        console.error('Usuario no encontrado');
+        throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
+      }
 
-    if (!user) {
-      throw new Error('Usuario no encontrado');
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      return isPasswordValid;
+    } catch (error) {
+      console.error('Error al validar la contraseña:', error.message);
+      throw new HttpException(error.message || 'Error al validar la contraseña', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    return isPasswordValid;
   }
 }
 

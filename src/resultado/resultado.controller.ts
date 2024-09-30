@@ -18,7 +18,8 @@ export class ResultadoController {
         data: resultado,
       };
     } catch (error) {
-      throw new HttpException('Error al crear el resultado', HttpStatus.BAD_REQUEST);
+      console.error('Error al crear el resultado:', error.message);
+      throw new HttpException(error.message || 'Error al crear el resultado', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -32,7 +33,8 @@ export class ResultadoController {
         data: resultados,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar los resultados', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar los resultados:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar los resultados', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -40,16 +42,18 @@ export class ResultadoController {
   async findOne(@Param('id') id: string) {
     try {
       const resultado = await this.resultadoService.findOne(+id);
-      if (!resultado) {
-        throw new HttpException('Resultado no encontrado', HttpStatus.NOT_FOUND);
-      }
       return {
         statusCode: HttpStatus.OK,
         message: 'Resultado recuperado exitosamente',
         data: resultado,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar el resultado', HttpStatus.INTERNAL_SERVER_ERROR);
+      if (error instanceof HttpException && error.getStatus() === HttpStatus.NOT_FOUND) {
+        console.error('Error: Resultado no encontrado', error.message);
+        throw new HttpException(error.message || 'Resultado no encontrado', HttpStatus.NOT_FOUND);
+      }
+      console.error('Error al recuperar el resultado:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar el resultado', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -59,6 +63,7 @@ export class ResultadoController {
     try {
       const [numberOfAffectedRows, [updatedResultado]] = await this.resultadoService.update(+id, updateResultadoDto);
       if (numberOfAffectedRows === 0) {
+        console.error('Error: Resultado no encontrado o sin cambios');
         throw new HttpException('Resultado no encontrado o sin cambios', HttpStatus.NOT_FOUND);
       }
       return {
@@ -67,7 +72,8 @@ export class ResultadoController {
         data: updatedResultado,
       };
     } catch (error) {
-      throw new HttpException('Error al actualizar el resultado', HttpStatus.BAD_REQUEST);
+      console.error('Error al actualizar el resultado:', error.message);
+      throw new HttpException(error.message || 'Error al actualizar el resultado', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -80,7 +86,8 @@ export class ResultadoController {
         message: 'Resultado eliminado exitosamente',
       };
     } catch (error) {
-      throw new HttpException('Error al eliminar el resultado', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al eliminar el resultado:', error.message);
+      throw new HttpException(error.message || 'Error al eliminar el resultado', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

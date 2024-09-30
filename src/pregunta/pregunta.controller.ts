@@ -18,7 +18,8 @@ export class PreguntaController {
         data: pregunta,
       };
     } catch (error) {
-      throw new HttpException('Error al crear la pregunta', HttpStatus.BAD_REQUEST);
+      console.error('Error al crear la pregunta:', error.message);
+      throw new HttpException(error.message || 'Error al crear la pregunta', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -32,7 +33,8 @@ export class PreguntaController {
         data: preguntas,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar las preguntas', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar las preguntas:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar las preguntas', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -41,6 +43,7 @@ export class PreguntaController {
     try {
       const pregunta = await this.preguntaService.findOne(+id);
       if (!pregunta) {
+        console.error('Pregunta no encontrada');
         throw new HttpException('Pregunta no encontrada', HttpStatus.NOT_FOUND);
       }
       return {
@@ -49,7 +52,8 @@ export class PreguntaController {
         data: pregunta,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar la pregunta', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar la pregunta:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar la pregunta', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -59,6 +63,7 @@ export class PreguntaController {
     try {
       const [numberOfAffectedRows, [updatedPregunta]] = await this.preguntaService.update(+id, updatePreguntaDto);
       if (numberOfAffectedRows === 0) {
+        console.error('Pregunta no encontrada o sin cambios');
         throw new HttpException('Pregunta no encontrada o sin cambios', HttpStatus.NOT_FOUND);
       }
       return {
@@ -67,7 +72,8 @@ export class PreguntaController {
         data: updatedPregunta,
       };
     } catch (error) {
-      throw new HttpException('Error al actualizar la pregunta', HttpStatus.BAD_REQUEST);
+      console.error('Error al actualizar la pregunta:', error.message);
+      throw new HttpException(error.message || 'Error al actualizar la pregunta', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -80,7 +86,9 @@ export class PreguntaController {
         message: 'Pregunta eliminada exitosamente',
       };
     } catch (error) {
-      throw new HttpException('Error al eliminar la pregunta', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al eliminar la pregunta:', error.message);
+      throw new HttpException(error.message || 'Error al eliminar la pregunta', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }
+

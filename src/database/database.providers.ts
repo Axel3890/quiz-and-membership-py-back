@@ -27,7 +27,7 @@ export const databaseProviders = [
       sequelize.addModels([Modulo, Tema, Subtema, Pago, Subscripcion, Favorito, Opcion, Pregunta, Resultado, User]);
 
       // Sincroniza los modelos con la base de datos
-      await sequelize.sync();
+      await sequelize.sync({ force: false });
       
       return sequelize;
     },

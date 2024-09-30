@@ -18,7 +18,8 @@ export class SubtemaController {
         data: subtema,
       };
     } catch (error) {
-      throw new HttpException('Error al crear el subtema', HttpStatus.BAD_REQUEST);
+      console.error('Error al crear el subtema:', error.message);
+      throw new HttpException(error.message || 'Error al crear el subtema', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -32,7 +33,8 @@ export class SubtemaController {
         data: subtemas,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar los subtemas', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar los subtemas:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar los subtemas', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -41,6 +43,7 @@ export class SubtemaController {
     try {
       const subtema = await this.subtemaService.findOne(+id);
       if (!subtema) {
+        console.error('Subtema no encontrado');
         throw new HttpException('Subtema no encontrado', HttpStatus.NOT_FOUND);
       }
       return {
@@ -49,7 +52,8 @@ export class SubtemaController {
         data: subtema,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar el subtema', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar el subtema:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar el subtema', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -59,6 +63,7 @@ export class SubtemaController {
     try {
       const [numberOfAffectedRows, [updatedSubtema]] = await this.subtemaService.update(+id, updateSubtemaDto);
       if (numberOfAffectedRows === 0) {
+        console.error('Subtema no encontrado o sin cambios');
         throw new HttpException('Subtema no encontrado o sin cambios', HttpStatus.NOT_FOUND);
       }
       return {
@@ -67,7 +72,8 @@ export class SubtemaController {
         data: updatedSubtema,
       };
     } catch (error) {
-      throw new HttpException('Error al actualizar el subtema', HttpStatus.BAD_REQUEST);
+      console.error('Error al actualizar el subtema:', error.message);
+      throw new HttpException(error.message || 'Error al actualizar el subtema', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -80,7 +86,8 @@ export class SubtemaController {
         message: 'Subtema eliminado exitosamente',
       };
     } catch (error) {
-      throw new HttpException('Error al eliminar el subtema', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al eliminar el subtema:', error.message);
+      throw new HttpException(error.message || 'Error al eliminar el subtema', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

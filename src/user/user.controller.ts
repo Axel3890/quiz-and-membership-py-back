@@ -18,7 +18,8 @@ export class UserController {
         data: user,
       };
     } catch (error) {
-      throw new HttpException('Error al crear el usuario', HttpStatus.BAD_REQUEST);
+      console.error('Error al crear el usuario:', error.message);
+      throw new HttpException(error.message || 'Error al crear el usuario', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -32,7 +33,8 @@ export class UserController {
         data: users,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar los usuarios', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar los usuarios:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar los usuarios', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -41,6 +43,7 @@ export class UserController {
     try {
       const user = await this.userService.findOne(+id);
       if (!user) {
+        console.error('Usuario no encontrado');
         throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
       }
       return {
@@ -49,7 +52,8 @@ export class UserController {
         data: user,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar el usuario', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar el usuario:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar el usuario', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -59,6 +63,7 @@ export class UserController {
     try {
       const [numberOfAffectedRows, [updatedUser]] = await this.userService.update(+id, updateUserDto);
       if (numberOfAffectedRows === 0) {
+        console.error('Usuario no encontrado o sin cambios');
         throw new HttpException('Usuario no encontrado o sin cambios', HttpStatus.NOT_FOUND);
       }
       return {
@@ -67,7 +72,8 @@ export class UserController {
         data: updatedUser,
       };
     } catch (error) {
-      throw new HttpException('Error al actualizar el usuario', HttpStatus.BAD_REQUEST);
+      console.error('Error al actualizar el usuario:', error.message);
+      throw new HttpException(error.message || 'Error al actualizar el usuario', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -80,7 +86,8 @@ export class UserController {
         message: 'Usuario eliminado exitosamente',
       };
     } catch (error) {
-      throw new HttpException('Error al eliminar el usuario', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al eliminar el usuario:', error.message);
+      throw new HttpException(error.message || 'Error al eliminar el usuario', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

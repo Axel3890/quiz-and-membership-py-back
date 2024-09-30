@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { CreatePreguntaDto } from './dto/create-pregunta.dto';
 import { UpdatePreguntaDto } from './dto/update-pregunta.dto';
 import { Pregunta } from './entities/pregunta.entity';
@@ -11,41 +11,71 @@ export class PreguntaService {
   ) {}
 
   async create(createPreguntaDto: CreatePreguntaDto): Promise<Pregunta> {
-    return this.preguntaRepository.create({
-      id_subtema: createPreguntaDto.id_subtema,
-      year: createPreguntaDto.year,
-      texto_pregunta: createPreguntaDto.texto_pregunta,
-    });
+    try {
+      return await this.preguntaRepository.create({
+        id_subtema: createPreguntaDto.id_subtema,
+        year: createPreguntaDto.year,
+        texto_pregunta: createPreguntaDto.texto_pregunta,
+      });
+    } catch (error) {
+      console.error('Error al crear la pregunta:', error.message);
+      throw new HttpException(error.message || 'Error al crear la pregunta', HttpStatus.BAD_REQUEST);
+    }
   }
 
-
   async findAll(): Promise<Pregunta[]> {
-    return this.preguntaRepository.findAll();
+    try {
+      return await this.preguntaRepository.findAll();
+    } catch (error) {
+      console.error('Error al recuperar las preguntas:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar las preguntas', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async findOne(id: number): Promise<Pregunta> {
-    return this.preguntaRepository.findByPk(id);
+    try {
+      const pregunta = await this.preguntaRepository.findByPk(id);
+      if (!pregunta) {
+        console.error('Pregunta no encontrada');
+        throw new HttpException('Pregunta no encontrada', HttpStatus.NOT_FOUND);
+      }
+      return pregunta;
+    } catch (error) {
+      console.error('Error al recuperar la pregunta:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar la pregunta', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async update(id_pregunta: number, updatePreguntaDto: UpdatePreguntaDto): Promise<[number, Pregunta[]]> {
-    return this.preguntaRepository.update(
-      {
-        id_subtema: updatePreguntaDto.id_subtema,
-        year: updatePreguntaDto.year,
-        texto_pregunta: updatePreguntaDto.texto_pregunta,
-      },
-      {
-        where: { id_pregunta },
-        returning: true,
-      },
-    );
+    try {
+      return await this.preguntaRepository.update(
+        {
+          id_subtema: updatePreguntaDto.id_subtema,
+          year: updatePreguntaDto.year,
+          texto_pregunta: updatePreguntaDto.texto_pregunta,
+        },
+        {
+          where: { id_pregunta },
+          returning: true,
+        },
+      );
+    } catch (error) {
+      console.error('Error al actualizar la pregunta:', error.message);
+      throw new HttpException(error.message || 'Error al actualizar la pregunta', HttpStatus.BAD_REQUEST);
+    }
   }
 
   async remove(id_pregunta: number): Promise<void> {
-    const pregunta = await this.preguntaRepository.findByPk(id_pregunta);
-    if (!pregunta) {
-      throw new Error('Pregunta no encontrada');
+    try {
+      const pregunta = await this.preguntaRepository.findByPk(id_pregunta);
+      if (!pregunta) {
+        console.error('Pregunta no encontrada');
+        throw new HttpException('Pregunta no encontrada', HttpStatus.NOT_FOUND);
+      }
+      await pregunta.destroy();
+    } catch (error) {
+      console.error('Error al eliminar la pregunta:', error.message);
+      throw new HttpException(error.message || 'Error al eliminar la pregunta', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    await pregunta.destroy();
   }
 }

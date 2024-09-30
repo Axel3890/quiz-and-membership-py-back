@@ -18,7 +18,8 @@ export class OpcionController {
         data: opcion,
       };
     } catch (error) {
-      throw new HttpException('Error al crear la opción', HttpStatus.BAD_REQUEST);
+      console.error('Error al crear la opción:', error.message);
+      throw new HttpException(error.message || 'Error al crear la opción', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -32,7 +33,8 @@ export class OpcionController {
         data: opciones,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar las opciones', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar las opciones:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar las opciones', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -41,6 +43,7 @@ export class OpcionController {
     try {
       const opcion = await this.opcionService.findOne(+id);
       if (!opcion) {
+        console.error('Opción no encontrada');
         throw new HttpException('Opción no encontrada', HttpStatus.NOT_FOUND);
       }
       return {
@@ -49,7 +52,8 @@ export class OpcionController {
         data: opcion,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar la opción', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar la opción:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar la opción', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -59,6 +63,7 @@ export class OpcionController {
     try {
       const [numberOfAffectedRows, [updatedOpcion]] = await this.opcionService.update(+id, updateOpcionDto);
       if (numberOfAffectedRows === 0) {
+        console.error('Opción no encontrada o sin cambios');
         throw new HttpException('Opción no encontrada o sin cambios', HttpStatus.NOT_FOUND);
       }
       return {
@@ -67,7 +72,8 @@ export class OpcionController {
         data: updatedOpcion,
       };
     } catch (error) {
-      throw new HttpException('Error al actualizar la opción', HttpStatus.BAD_REQUEST);
+      console.error('Error al actualizar la opción:', error.message);
+      throw new HttpException(error.message || 'Error al actualizar la opción', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -80,7 +86,8 @@ export class OpcionController {
         message: 'Opción eliminada exitosamente',
       };
     } catch (error) {
-      throw new HttpException('Error al eliminar la opción', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al eliminar la opción:', error.message);
+      throw new HttpException(error.message || 'Error al eliminar la opción', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

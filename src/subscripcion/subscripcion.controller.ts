@@ -18,7 +18,8 @@ export class SubscripcionController {
         data: subscripcion,
       };
     } catch (error) {
-      throw new HttpException('Error al crear la suscripción', HttpStatus.BAD_REQUEST);
+      console.error('Error al crear la suscripción:', error.message);
+      throw new HttpException(error.message || 'Error al crear la suscripción', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -32,7 +33,8 @@ export class SubscripcionController {
         data: subscripciones,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar las suscripciones', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar las suscripciones:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar las suscripciones', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -41,6 +43,7 @@ export class SubscripcionController {
     try {
       const subscripcion = await this.subscripcionService.findOne(+id);
       if (!subscripcion) {
+        console.error('Suscripción no encontrada');
         throw new HttpException('Suscripción no encontrada', HttpStatus.NOT_FOUND);
       }
       return {
@@ -49,7 +52,8 @@ export class SubscripcionController {
         data: subscripcion,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar la suscripción', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar la suscripción:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar la suscripción', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -59,6 +63,7 @@ export class SubscripcionController {
     try {
       const [numberOfAffectedRows, [updatedSubscripcion]] = await this.subscripcionService.update(+id, updateSubscripcionDto);
       if (numberOfAffectedRows === 0) {
+        console.error('Suscripción no encontrada o sin cambios');
         throw new HttpException('Suscripción no encontrada o sin cambios', HttpStatus.NOT_FOUND);
       }
       return {
@@ -67,7 +72,8 @@ export class SubscripcionController {
         data: updatedSubscripcion,
       };
     } catch (error) {
-      throw new HttpException('Error al actualizar la suscripción', HttpStatus.BAD_REQUEST);
+      console.error('Error al actualizar la suscripción:', error.message);
+      throw new HttpException(error.message || 'Error al actualizar la suscripción', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -80,7 +86,8 @@ export class SubscripcionController {
         message: 'Suscripción eliminada exitosamente',
       };
     } catch (error) {
-      throw new HttpException('Error al eliminar la suscripción', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al eliminar la suscripción:', error.message);
+      throw new HttpException(error.message || 'Error al eliminar la suscripción', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

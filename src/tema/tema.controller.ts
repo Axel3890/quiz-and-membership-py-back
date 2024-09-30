@@ -18,7 +18,8 @@ export class TemaController {
         data: tema,
       };
     } catch (error) {
-      throw new HttpException('Error al crear el tema', HttpStatus.BAD_REQUEST);
+      console.error('Error al crear el tema:', error.message);
+      throw new HttpException(error.message || 'Error al crear el tema', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -32,7 +33,8 @@ export class TemaController {
         data: temas,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar los temas', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar los temas:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar los temas', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -41,6 +43,7 @@ export class TemaController {
     try {
       const tema = await this.temaService.findOne(+id);
       if (!tema) {
+        console.error('Tema no encontrado');
         throw new HttpException('Tema no encontrado', HttpStatus.NOT_FOUND);
       }
       return {
@@ -49,7 +52,8 @@ export class TemaController {
         data: tema,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar el tema', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar el tema:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar el tema', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -59,6 +63,7 @@ export class TemaController {
     try {
       const [numberOfAffectedRows, [updatedTema]] = await this.temaService.update(+id, updateTemaDto);
       if (numberOfAffectedRows === 0) {
+        console.error('Tema no encontrado o sin cambios');
         throw new HttpException('Tema no encontrado o sin cambios', HttpStatus.NOT_FOUND);
       }
       return {
@@ -67,7 +72,8 @@ export class TemaController {
         data: updatedTema,
       };
     } catch (error) {
-      throw new HttpException('Error al actualizar el tema', HttpStatus.BAD_REQUEST);
+      console.error('Error al actualizar el tema:', error.message);
+      throw new HttpException(error.message || 'Error al actualizar el tema', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -80,7 +86,8 @@ export class TemaController {
         message: 'Tema eliminado exitosamente',
       };
     } catch (error) {
-      throw new HttpException('Error al eliminar el tema', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al eliminar el tema:', error.message);
+      throw new HttpException(error.message || 'Error al eliminar el tema', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

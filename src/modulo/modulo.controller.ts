@@ -18,7 +18,8 @@ export class ModuloController {
         data: modulo,
       };
     } catch (error) {
-      throw new HttpException('Error al crear el módulo', HttpStatus.BAD_REQUEST);
+      console.error('Error al crear el módulo:', error.message);
+      throw new HttpException(error.message || 'Error al crear el módulo', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -32,7 +33,8 @@ export class ModuloController {
         data: modulos,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar los módulos', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar los módulos:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar los módulos', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -41,6 +43,7 @@ export class ModuloController {
     try {
       const modulo = await this.moduloService.findOne(+id);
       if (!modulo) {
+        console.error('Módulo no encontrado');
         throw new HttpException('Módulo no encontrado', HttpStatus.NOT_FOUND);
       }
       return {
@@ -49,7 +52,8 @@ export class ModuloController {
         data: modulo,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar el módulo', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar el módulo:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar el módulo', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -59,6 +63,7 @@ export class ModuloController {
     try {
       const [numberOfAffectedRows, [updatedModulo]] = await this.moduloService.update(+id, updateModuloDto);
       if (numberOfAffectedRows === 0) {
+        console.error('Módulo no encontrado o sin cambios');
         throw new HttpException('Módulo no encontrado o sin cambios', HttpStatus.NOT_FOUND);
       }
       return {
@@ -67,7 +72,8 @@ export class ModuloController {
         data: updatedModulo,
       };
     } catch (error) {
-      throw new HttpException('Error al actualizar el módulo', HttpStatus.BAD_REQUEST);
+      console.error('Error al actualizar el módulo:', error.message);
+      throw new HttpException(error.message || 'Error al actualizar el módulo', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -80,7 +86,8 @@ export class ModuloController {
         message: 'Módulo eliminado exitosamente',
       };
     } catch (error) {
-      throw new HttpException('Error al eliminar el módulo', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al eliminar el módulo:', error.message);
+      throw new HttpException(error.message || 'Error al eliminar el módulo', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

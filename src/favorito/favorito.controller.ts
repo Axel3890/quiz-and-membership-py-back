@@ -18,7 +18,8 @@ export class FavoritoController {
         data: favorito,
       };
     } catch (error) {
-      throw new HttpException('Error al crear el favorito', HttpStatus.BAD_REQUEST);
+      console.error('Error al crear el favorito:', error.message);
+      throw new HttpException(error.message || 'Error al crear el favorito', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -32,7 +33,8 @@ export class FavoritoController {
         data: favoritos,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar los favoritos', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar los favoritos:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar los favoritos', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -41,6 +43,7 @@ export class FavoritoController {
     try {
       const favorito = await this.favoritoService.findOne(+id);
       if (!favorito) {
+        console.error('Favorito no encontrado');
         throw new HttpException('Favorito no encontrado', HttpStatus.NOT_FOUND);
       }
       return {
@@ -49,7 +52,8 @@ export class FavoritoController {
         data: favorito,
       };
     } catch (error) {
-      throw new HttpException('Error al recuperar el favorito', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al recuperar el favorito:', error.message);
+      throw new HttpException(error.message || 'Error al recuperar el favorito', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -59,6 +63,7 @@ export class FavoritoController {
     try {
       const [numberOfAffectedRows, [updatedFavorito]] = await this.favoritoService.update(+id, updateFavoritoDto);
       if (numberOfAffectedRows === 0) {
+        console.error('Favorito no encontrado o sin cambios');
         throw new HttpException('Favorito no encontrado o sin cambios', HttpStatus.NOT_FOUND);
       }
       return {
@@ -67,7 +72,8 @@ export class FavoritoController {
         data: updatedFavorito,
       };
     } catch (error) {
-      throw new HttpException('Error al actualizar el favorito', HttpStatus.BAD_REQUEST);
+      console.error('Error al actualizar el favorito:', error.message);
+      throw new HttpException(error.message || 'Error al actualizar el favorito', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -80,7 +86,8 @@ export class FavoritoController {
         message: 'Favorito eliminado exitosamente',
       };
     } catch (error) {
-      throw new HttpException('Error al eliminar el favorito', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Error al eliminar el favorito:', error.message);
+      throw new HttpException(error.message || 'Error al eliminar el favorito', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }
