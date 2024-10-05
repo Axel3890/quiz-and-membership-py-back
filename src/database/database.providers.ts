@@ -9,6 +9,7 @@ import { Opcion } from 'src/opcion/entities/opcion.entity';
 import { Pregunta } from 'src/pregunta/entities/pregunta.entity';
 import { Resultado } from 'src/resultado/entities/resultado.entity';
 import { User } from 'src/user/entities/user.entity';
+import * as dotenv from 'dotenv';
 
 export const databaseProviders = [
   {
