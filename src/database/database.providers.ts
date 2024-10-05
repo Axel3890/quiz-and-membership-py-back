@@ -14,13 +14,23 @@ export const databaseProviders = [
   {
     provide: 'SEQUELIZE',
     useFactory: async () => {
-      const sequelize = new Sequelize({
-        dialect: 'postgres',   // Usando PostgreSQL como base de datos
-        host: 'localhost',
-        port: 5432,            // Puerto de PostgreSQL
-        username: 'postgres',  // Tu usuario de PostgreSQL
-        password: 'admin',     // Tu contraseña
-        database: 'quiz',      // Nombre de la base de datos
+      // const sequelize = new Sequelize({
+      //   dialect: 'postgres',  
+      //   host: 'localhost',
+      //   port: 5432,            // Puerto de PostgreSQL
+      //   username: 'postgres',  // usuario de PostgreSQL
+      //   password: 'admin',     // contraseña
+      //   database: 'quiz',      // Nombre de la base de datos
+      // });
+
+      const sequelize = new Sequelize(process.env.DATABASE_URL, {
+        dialect: 'postgres',
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          }
+        }
       });
 
       // Agregar los modelos que quieres sincronizar
