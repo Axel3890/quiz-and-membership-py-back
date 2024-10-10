@@ -30,6 +30,9 @@ export class User extends Model {
   @Column
   fecha_registro: Date;
 
+  @Column({ allowNull: true })
+  avatar_img?: string;
+
   // Relación 1:N con Resultado
   @HasMany(() => Resultado)
   resultados: Resultado[];

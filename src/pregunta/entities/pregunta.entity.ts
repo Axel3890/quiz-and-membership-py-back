@@ -8,7 +8,7 @@ export class Pregunta extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column
-  id_pregunta: number;  // Clave primaria autoincrementable
+  id_pregunta: number;
 
   @ForeignKey(() => Subtema)
   @Column
@@ -19,6 +19,15 @@ export class Pregunta extends Model {
 
   @Column
   texto_pregunta: string;
+
+  @Column
+  explicacion_correcta: string;
+
+  @Column
+  explicacion_incorrecta: string;
+
+  @Column
+  imagen_video: string;
 
   // Relación N:1 con Subtema
   @BelongsTo(() => Subtema)

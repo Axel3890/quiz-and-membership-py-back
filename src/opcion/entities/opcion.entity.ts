@@ -17,15 +17,6 @@ export class Opcion extends Model {
 
   @Column
   es_correcta: boolean;
-
-  @Column
-  explicacion_correcta: string;
-
-  @Column
-  explicacion_incorrecta: string;
-
-  @Column
-  imagen_video: string;
   
   @BelongsTo(() => Pregunta)
   pregunta: Pregunta;
