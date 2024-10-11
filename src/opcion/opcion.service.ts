@@ -16,9 +16,6 @@ export class OpcionService {
         id_pregunta: createOpcionDto.id_pregunta,
         texto_opcion: createOpcionDto.texto_opcion,
         es_correcta: createOpcionDto.es_correcta,
-        explicacion_correcta: createOpcionDto.explicacion_correcta,
-        explicacion_incorrecta: createOpcionDto.explicacion_incorrecta,
-        imagen_video: createOpcionDto.imagen_video,
       });
     } catch (error) {
       console.error('Error al crear la opción:', error.message);
@@ -56,9 +53,6 @@ export class OpcionService {
           id_pregunta: updateOpcionDto.id_pregunta,
           texto_opcion: updateOpcionDto.texto_opcion,
           es_correcta: updateOpcionDto.es_correcta,
-          explicacion_correcta: updateOpcionDto.explicacion_correcta,
-          explicacion_incorrecta: updateOpcionDto.explicacion_incorrecta,
-          imagen_video: updateOpcionDto.imagen_video,
         },
         {
           where: { id_opcion },

@@ -10,13 +10,4 @@ export class CreateOpcionDto {
 
   @IsBoolean()
   es_correcta: boolean;
-
-  @IsString()
-  explicacion_correcta: string;
-
-  @IsString()
-  explicacion_incorrecta: string;
-
-  @IsString()
-  imagen_video?: string;
 }

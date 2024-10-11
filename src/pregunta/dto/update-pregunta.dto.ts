@@ -12,5 +12,17 @@ export class UpdatePreguntaDto {
   @IsOptional()
   @IsString()
   texto_pregunta?: string;
+
+  @IsOptional()
+  @IsString()
+  explicacion_correcta?: string;
+
+  @IsOptional()
+  @IsString()
+  explicacion_incorrecta?: string;
+
+  @IsOptional()
+  @IsString()
+  imagen_video?: string;
 }
 

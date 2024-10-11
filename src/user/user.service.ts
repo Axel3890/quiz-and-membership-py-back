@@ -11,6 +11,10 @@ export class UserService {
     private readonly userRepository: typeof User,
   ) {}
 
+  async findOneByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.findOne({ where: { email } });
+  }
+
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
@@ -91,20 +95,6 @@ export class UserService {
     }
   }
 
-  async validatePassword(email: string, password: string): Promise<boolean> {
-    try {
-      const user = await this.userRepository.findOne({ where: { email } });
-      if (!user) {
-        console.error('Usuario no encontrado');
-        throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
-      }
-
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      return isPasswordValid;
-    } catch (error) {
-      console.error('Error al validar la contraseña:', error.message);
-      throw new HttpException(error.message || 'Error al validar la contraseña', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
+  
 }
 

@@ -25,6 +25,6 @@ export class Favorito extends Model {
   user: User;
 
   // Relación N:1 con Pregunta
-  @BelongsTo(() => Pregunta)
+  @BelongsTo(() => Pregunta, { onDelete: 'CASCADE' }) // Eliminar en cascada cuando se borra una pregunta
   pregunta: Pregunta;
 }

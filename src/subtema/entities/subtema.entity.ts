@@ -1,6 +1,6 @@
-import { Table, Column, Model, ForeignKey, BelongsTo, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey, BelongsTo, HasMany, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
 import { Tema } from '../../tema/entities/tema.entity';
-
+import { Pregunta } from '../../pregunta/entities/pregunta.entity';
 @Table
 export class Subtema extends Model {
   @PrimaryKey
@@ -17,4 +17,8 @@ export class Subtema extends Model {
 
   @BelongsTo(() => Tema)
   tema: Tema;
+
+  // Relación 1:N con Pregunta con eliminación en cascada
+  @HasMany(() => Pregunta, { onDelete: 'CASCADE' }) 
+  preguntas: Pregunta[];
 }

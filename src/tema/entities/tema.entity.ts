@@ -19,6 +19,7 @@ export class Tema extends Model {
   @BelongsTo(() => Modulo)
   modulo: Modulo;
 
-  @HasMany(() => Subtema)
+  @HasMany(() => Subtema, { onDelete: 'CASCADE' }) // Aquí aplicamos el onDelete: 'CASCADE'
   subtemas: Subtema[];
 }
+

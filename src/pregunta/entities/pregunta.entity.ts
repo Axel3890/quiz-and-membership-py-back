@@ -2,6 +2,7 @@ import { Table, Column, Model, ForeignKey, HasMany, BelongsTo, PrimaryKey, AutoI
 import { Subtema } from '../../subtema/entities/subtema.entity';
 import { Resultado } from '../../resultado/entities/resultado.entity';
 import { Favorito } from '../../favorito/entities/favorito.entity';
+import { Opcion } from 'src/opcion/entities/opcion.entity';
 
 @Table
 export class Pregunta extends Model {
@@ -29,6 +30,9 @@ export class Pregunta extends Model {
   @Column
   imagen_video: string;
 
+  @HasMany(() => Opcion)
+  opciones: Opcion[];
+
   // Relación N:1 con Subtema
   @BelongsTo(() => Subtema)
   subtema: Subtema;
@@ -37,7 +41,7 @@ export class Pregunta extends Model {
   @HasMany(() => Resultado)
   resultados: Resultado[];
 
-  // Relación 1:N con Favorito
-  @HasMany(() => Favorito)
+  // Relación 1:N con Favorito con eliminación en cascada
+  @HasMany(() => Favorito, { onDelete: 'CASCADE' }) // Aquí se asegura la eliminación en cascada
   favoritos: Favorito[];
 }

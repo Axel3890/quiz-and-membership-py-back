@@ -18,7 +18,7 @@ export class Opcion extends Model {
   @Column
   es_correcta: boolean;
   
-  @BelongsTo(() => Pregunta)
+  @BelongsTo(() => Pregunta, { onDelete: 'CASCADE' }) 
   pregunta: Pregunta;
 }
 

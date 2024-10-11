@@ -12,8 +12,10 @@ import { PreguntaModule } from './pregunta/pregunta.module';
 import { OpcionModule } from './opcion/opcion.module';
 import { ResultadoModule } from './resultado/resultado.module';
 import { DatabaseModule } from './database/database.module';
+
+import { AuthModule } from './auth/auth.module';
 @Module({
-  imports: [ModuloModule, TemaModule, SubtemaModule, UserModule, SubscripcionModule, PagoModule, FavoritoModule, PreguntaModule, OpcionModule, ResultadoModule, DatabaseModule],
+  imports: [ModuloModule, TemaModule, SubtemaModule, UserModule, SubscripcionModule, PagoModule, FavoritoModule, PreguntaModule, OpcionModule, ResultadoModule, DatabaseModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

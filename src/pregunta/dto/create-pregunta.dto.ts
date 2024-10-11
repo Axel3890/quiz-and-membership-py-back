@@ -11,4 +11,13 @@ export class CreatePreguntaDto {
   @IsNotEmpty()
   @IsString()
   texto_pregunta: string;
+
+  @IsString()
+  explicacion_correcta: string;
+
+  @IsString()
+  explicacion_incorrecta: string;
+
+  @IsString()
+  imagen_video?: string;
 }
