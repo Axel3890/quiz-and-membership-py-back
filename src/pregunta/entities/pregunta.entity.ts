@@ -1,4 +1,4 @@
-import { Table, Column, Model, ForeignKey, HasMany, BelongsTo, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey, HasMany, BelongsTo, PrimaryKey, AutoIncrement, DataType } from 'sequelize-typescript';
 import { Subtema } from '../../subtema/entities/subtema.entity';
 import { Resultado } from '../../resultado/entities/resultado.entity';
 import { Favorito } from '../../favorito/entities/favorito.entity';
@@ -21,10 +21,10 @@ export class Pregunta extends Model {
   @Column
   texto_pregunta: string;
 
-  @Column
+  @Column(DataType.TEXT)
   explicacion_correcta: string;
 
-  @Column
+  @Column(DataType.TEXT)
   explicacion_incorrecta: string;
 
   @Column
@@ -33,15 +33,12 @@ export class Pregunta extends Model {
   @HasMany(() => Opcion)
   opciones: Opcion[];
 
-  // Relación N:1 con Subtema
   @BelongsTo(() => Subtema)
   subtema: Subtema;
 
-  // Relación 1:N con Resultado
   @HasMany(() => Resultado)
   resultados: Resultado[];
 
-  // Relación 1:N con Favorito con eliminación en cascada
-  @HasMany(() => Favorito, { onDelete: 'CASCADE' }) // Aquí se asegura la eliminación en cascada
+  @HasMany(() => Favorito, { onDelete: 'CASCADE' })
   favoritos: Favorito[];
 }
