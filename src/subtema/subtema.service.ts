@@ -53,7 +53,7 @@ export class SubtemaService {
           id_tema: updateSubtemaDto.id_tema,
         },
         {
-          where: { id },
+          where: { id_subtema: id },
           returning: true,
         }
       );

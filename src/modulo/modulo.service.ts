@@ -53,7 +53,7 @@ export class ModuloService {
           imagen: updateModuloDto.imagen,
         },
         {
-          where: { id },
+          where: { id_modulo: id },
           returning: true,
         },
       );

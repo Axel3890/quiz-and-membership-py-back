@@ -53,7 +53,7 @@ export class TemaService {
           id_modulo: updateTemaDto.id_modulo,
         },
         {
-          where: { id },
+          where: { id_tema: id },
           returning: true,
         }
       );
