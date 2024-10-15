@@ -27,6 +27,9 @@ export class UserService {
         password: hashedPassword,
         role: createUserDto.role,
         fecha_registro: new Date(),
+        is_approved: createUserDto.is_approved,
+        carrera: createUserDto.carrera,
+        facultad: createUserDto.facultad
       });
     } catch (error) {
       console.error('Error al crear el usuario:', error.message);
@@ -65,6 +68,9 @@ export class UserService {
         apellido: updateUserDto.apellido,
         email: updateUserDto.email,
         role: updateUserDto.role,
+        is_approved: updateUserDto.is_approved,
+        carrera: updateUserDto.carrera,
+        facultad: updateUserDto.facultad
       };
 
       if (updateUserDto.password) {
