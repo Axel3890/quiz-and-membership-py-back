@@ -33,6 +33,17 @@ export class User extends Model {
   @Column({ allowNull: true })
   avatar_img?: string;
 
+
+  @Column({ allowNull: true })
+  is_approved: boolean;
+
+  @Column({ allowNull: true })
+  carrera?: string;
+
+
+  @Column({ allowNull: true })
+  facultad?: string;
+
   // Relación 1:N con Resultado
   @HasMany(() => Resultado)
   resultados: Resultado[];
