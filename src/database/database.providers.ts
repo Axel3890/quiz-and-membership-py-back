@@ -24,7 +24,7 @@ export const databaseProviders = [
         //   database: 'quiz',      // Nombre de la base de datos
         // });
 
-        const sequelize = new Sequelize(process.env.DATABASE_URL, {
+        const sequelize = new Sequelize('postgres://default:qOT4PyAbK5pQ@ep-shrill-wind-a45clpvj.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require', {
           dialect: 'postgres',
           dialectOptions: {
             ssl: {
