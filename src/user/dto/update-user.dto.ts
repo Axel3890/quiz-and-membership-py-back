@@ -28,6 +28,10 @@ export class UpdateUserDto {
   @IsOptional()
   @IsBoolean()
   is_approved?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  is_user_active: boolean; 
   
   @IsOptional()
   @IsString()

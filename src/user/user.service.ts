@@ -28,6 +28,7 @@ export class UserService {
         role: createUserDto.role,
         fecha_registro: new Date(),
         is_approved: createUserDto.is_approved,
+        is_user_active: createUserDto.is_user_active,
         carrera: createUserDto.carrera,
         facultad: createUserDto.facultad
       });
@@ -69,6 +70,7 @@ export class UserService {
         email: updateUserDto.email,
         role: updateUserDto.role,
         is_approved: updateUserDto.is_approved,
+        is_user_active: updateUserDto.is_user_active,
         carrera: updateUserDto.carrera,
         facultad: updateUserDto.facultad
       };
