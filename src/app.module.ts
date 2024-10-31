@@ -14,8 +14,9 @@ import { ResultadoModule } from './resultado/resultado.module';
 import { DatabaseModule } from './database/database.module';
 
 import { AuthModule } from './auth/auth.module';
+import { ComentariosModule } from './comentarios/comentarios.module';
 @Module({
-  imports: [ModuloModule, TemaModule, SubtemaModule, UserModule, SubscripcionModule, PagoModule, FavoritoModule, PreguntaModule, OpcionModule, ResultadoModule, DatabaseModule, AuthModule],
+  imports: [ModuloModule, TemaModule, SubtemaModule, UserModule, SubscripcionModule, PagoModule, FavoritoModule, PreguntaModule, OpcionModule, ResultadoModule, DatabaseModule, AuthModule, ComentariosModule],
   controllers: [AppController],
   providers: [AppService],
 })

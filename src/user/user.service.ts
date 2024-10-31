@@ -3,6 +3,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { Favorito } from 'src/favorito/entities/favorito.entity';
+import { Resultado } from 'src/resultado/entities/resultado.entity';
 
 @Injectable()
 export class UserService {
@@ -40,7 +42,9 @@ export class UserService {
 
   async findAll(): Promise<User[]> {
     try {
-      return await this.userRepository.findAll();
+      return await this.userRepository.findAll({
+        include: [Favorito, Resultado],
+      });
     } catch (error) {
       console.error('Error al recuperar los usuarios:', error.message);
       throw new HttpException(error.message || 'Error al recuperar los usuarios', HttpStatus.INTERNAL_SERVER_ERROR);

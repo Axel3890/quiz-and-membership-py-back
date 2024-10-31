@@ -10,6 +10,7 @@ import { Pregunta } from 'src/pregunta/entities/pregunta.entity';
 import { Resultado } from 'src/resultado/entities/resultado.entity';
 import { User } from 'src/user/entities/user.entity';
 import * as dotenv from 'dotenv';
+import { Comentario } from 'src/comentarios/entities/comentario.entity';
 
 export const databaseProviders = [
   {
@@ -35,7 +36,7 @@ export const databaseProviders = [
         });
 
       // Agregar los modelos que quieres sincronizar
-      sequelize.addModels([Modulo, Tema, Subtema, Pago, Subscripcion, Favorito, Opcion, Pregunta, Resultado, User]);
+      sequelize.addModels([Modulo, Tema, Subtema, Pago, Subscripcion, Favorito, Opcion, Pregunta, Resultado, User, Comentario]);
 
       // Sincroniza los modelos con la base de datos
       await sequelize.sync({ force: false, alter: true });
