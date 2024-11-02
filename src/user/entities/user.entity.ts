@@ -46,6 +46,9 @@ export class User extends Model {
 
   @Column({ allowNull: true })
   facultad?: string;
+  
+  @Column({ allowNull: true })
+  estado_suscripcion?: string;
 
   // Relación 1:N con Resultado
   @HasMany(() => Resultado)
