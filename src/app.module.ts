@@ -15,11 +15,10 @@ import { DatabaseModule } from './database/database.module';
 
 import { AuthModule } from './auth/auth.module';
 import { ComentariosModule } from './comentarios/comentarios.module';
-import { PagoparService } from './pagopar/pagopar.service';
-import { PagoparModule } from './pagopar/pagopar.module';
+
 @Module({
-  imports: [ModuloModule, TemaModule, SubtemaModule, UserModule, SubscripcionModule, PagoModule, FavoritoModule, PreguntaModule, OpcionModule, ResultadoModule, DatabaseModule, AuthModule, ComentariosModule, PagoparModule],
+  imports: [ModuloModule, TemaModule, SubtemaModule, UserModule, SubscripcionModule, PagoModule, FavoritoModule, PreguntaModule, OpcionModule, ResultadoModule, DatabaseModule, AuthModule, ComentariosModule],
   controllers: [AppController],
-  providers: [AppService, PagoparService],
+  providers: [AppService],
 })
 export class AppModule {}
