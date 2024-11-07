@@ -1,12 +1,11 @@
-import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Inject, Body, HttpException, HttpStatus } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { User } from "../user/entities/user.entity";
-import { InjectModel } from '@nestjs/sequelize';
 
 @Controller('pagopar-subscription')
 export class PagoparSubscriptionController {
   constructor(
-    @InjectModel(User) private readonly userModel: typeof User
+    @Inject('USER_REPOSITORY') private readonly userRepository: typeof User, // Inyección correcta
   ) {}
 
   @Post('callback')
@@ -16,14 +15,12 @@ export class PagoparSubscriptionController {
       .update(privateKey + notificationData.tipo_accion)
       .digest('hex');
 
-    // Validar el token de seguridad
     if (generatedToken !== notificationData.token) {
       throw new HttpException('Invalid token', HttpStatus.FORBIDDEN);
     }
 
-    // Obtener datos del usuario desde la notificación
-    const userIdentifier = notificationData.usuario.token_identificador; // ID del usuario (ajustar si se usa otro campo único)
-    const user = await this.userModel.findOne({ where: { id_user: userIdentifier } });
+    const userIdentifier = notificationData.usuario.token_identificador;
+    const user = await this.userRepository.findOne({ where: { id_user: userIdentifier } });
 
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -50,3 +47,4 @@ export class PagoparSubscriptionController {
     return notificationData;
   }
 }
+

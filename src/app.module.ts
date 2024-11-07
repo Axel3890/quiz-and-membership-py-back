@@ -6,7 +6,7 @@ import { TemaModule } from './tema/tema.module';
 import { SubtemaModule } from './subtema/subtema.module';
 import { UserModule } from './user/user.module';
 import { SubscripcionModule } from './subscripcion/subscripcion.module';
-import { PagoModule } from './pago/pago.module';
+import { PagoModule } from "./pagopar/pago.module"
 import { FavoritoModule } from './favorito/favorito.module';
 import { PreguntaModule } from './pregunta/pregunta.module';
 import { OpcionModule } from './opcion/opcion.module';
