@@ -33,7 +33,7 @@ export class User extends Model {
   @Column({ allowNull: true })
   avatar_img?: string;
 
-  @Column({ allowNull: true })
+  @Column({ defaultValue: true })
   is_user_active?: boolean;
 
 

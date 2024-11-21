@@ -90,5 +90,7 @@ export class PreguntaController {
       throw new HttpException(error.message || 'Error al eliminar la pregunta', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  
 }
 

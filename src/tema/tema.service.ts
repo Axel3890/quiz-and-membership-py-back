@@ -2,6 +2,8 @@ import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { Tema } from './entities/tema.entity';
 import { CreateTemaDto } from './dto/create-tema.dto';
 import { UpdateTemaDto } from './dto/update-tema.dto';
+import { Subtema } from 'src/subtema/entities/subtema.entity';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class TemaService {
@@ -76,4 +78,24 @@ export class TemaService {
       throw new HttpException(error.message || 'Error al eliminar el tema', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async findTemasByModuloIds(moduloIds: number[]): Promise<Tema[]> {
+    try {
+      return await this.temaRepository.findAll({
+        where: {
+          id_modulo: {
+            [Op.in]: moduloIds,
+          },
+        },
+        include: [{ model: Subtema }], // Incluye subtemas si lo deseas
+      });
+    } catch (error) {
+      console.error('Error al filtrar temas:', error.message);
+      throw new HttpException(
+        error.message || 'Error al filtrar temas',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+  
 }

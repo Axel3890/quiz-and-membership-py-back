@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UsePipes, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UsePipes, HttpException, HttpStatus, Query } from '@nestjs/common';
 import { TemaService } from './tema.service';
 import { CreateTemaDto } from './dto/create-tema.dto';
 import { UpdateTemaDto } from './dto/update-tema.dto';
@@ -35,6 +35,43 @@ export class TemaController {
     } catch (error) {
       console.error('Error al recuperar los temas:', error.message);
       throw new HttpException(error.message || 'Error al recuperar los temas', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('filter')
+  async findTemasByModuloIds(@Query('moduloIds') moduloIds: string) {
+    try {
+      if (!moduloIds) {
+        throw new HttpException(
+          'Se requiere al menos un ID de módulo',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      const ids = moduloIds
+        .split(',')
+        .map((id) => parseInt(id, 10))
+        .filter((id) => !isNaN(id));
+
+      if (ids.length === 0) {
+        throw new HttpException(
+          'Los IDs de módulo deben ser números válidos',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      const temas = await this.temaService.findTemasByModuloIds(ids);
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Temas recuperados exitosamente',
+        data: temas,
+      };
+    } catch (error) {
+      console.error('Error al recuperar los temas:', error.message);
+      throw new HttpException(
+        error.message || 'Error al recuperar los temas',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -90,4 +127,6 @@ export class TemaController {
       throw new HttpException(error.message || 'Error al eliminar el tema', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+
 }
