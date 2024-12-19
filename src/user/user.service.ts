@@ -43,7 +43,7 @@ export class UserService {
   async findAll(): Promise<User[]> {
     try {
       return await this.userRepository.findAll({
-        include: [Favorito, Resultado],
+        // include: [Favorito, Resultado],
       });
     } catch (error) {
       console.error('Error al recuperar los usuarios:', error.message);
@@ -53,7 +53,9 @@ export class UserService {
 
   async findOne(id_user: number): Promise<User> {
     try {
-      const user = await this.userRepository.findByPk(id_user);
+      const user = await this.userRepository.findByPk(id_user,{
+        include: [Favorito, Resultado],
+      });
       if (!user) {
         console.error('Usuario no encontrado');
         throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);

@@ -37,4 +37,21 @@ export class ComentariosService {
     const comentario = await this.findOne(id);
     await comentario.destroy();
   }
+
+  // nuevos endpoint para comentarios
+  async findByPreguntaId(idPregunta: number): Promise<Comentario[]> {
+    return await this.comentarioModel.findAll({
+      where: {
+        id_pregunta: idPregunta
+      },
+      order: [['fecha_comentario', 'DESC']] // Ordenamos por fecha, más recientes primero
+    });
+  }
+  
+  async createForPregunta(idPregunta: number, createComentarioDto: CreateComentarioDto): Promise<Comentario> {
+    return await this.comentarioModel.create({ 
+      ...createComentarioDto,
+      id_pregunta: idPregunta
+    });
+  }
 }

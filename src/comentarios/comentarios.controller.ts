@@ -86,4 +86,48 @@ export class ComentariosController {
       throw new HttpException(error.message || 'Error al eliminar el comentario', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  // En nuevos endpoints
+  @Get('pregunta/:preguntaId')
+  async findByPregunta(@Param('preguntaId') preguntaId: string) {
+    try {
+      const comentarios = await this.comentariosService.findByPreguntaId(+preguntaId);
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Comentarios de la pregunta recuperados exitosamente',
+        data: comentarios,
+      };
+    } catch (error) {
+      console.error('Error al recuperar los comentarios de la pregunta:', error.message);
+      throw new HttpException(
+        error.message || 'Error al recuperar los comentarios de la pregunta', 
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  @Post('pregunta/:preguntaId')
+  @UsePipes(new ValidationPipe())
+  async createForPregunta(
+    @Param('preguntaId') preguntaId: string,
+    @Body() createComentarioDto: CreateComentarioDto
+  ) {
+    try {
+      const comentario = await this.comentariosService.createForPregunta(
+        +preguntaId,
+        createComentarioDto
+      );
+      return {
+        statusCode: HttpStatus.CREATED,
+        message: 'Comentario creado exitosamente para la pregunta',
+        data: comentario,
+      };
+    } catch (error) {
+      console.error('Error al crear el comentario para la pregunta:', error.message);
+      throw new HttpException(
+        error.message || 'Error al crear el comentario para la pregunta',
+        HttpStatus.BAD_REQUEST
+      );
+    }
+  }
 }
