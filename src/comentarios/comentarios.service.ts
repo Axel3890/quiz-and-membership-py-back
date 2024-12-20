@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/sequelize';
 import { CreateComentarioDto } from './dto/create-comentario.dto';
 import { UpdateComentarioDto } from './dto/update-comentario.dto';
 import { Comentario } from "./entities/comentario.entity"
+import { User } from "src/user/entities/user.entity"
+import { Pregunta } from "src/pregunta/entities/pregunta.entity"
 
 @Injectable()
 export class ComentariosService {
@@ -16,7 +18,9 @@ export class ComentariosService {
   }
 
   async findAll(): Promise<Comentario[]> {
-    return await this.comentarioModel.findAll();
+    return await this.comentarioModel.findAll({
+      include: [User, Pregunta],
+    });
   }
 
   async findOne(id: number): Promise<Comentario> {
