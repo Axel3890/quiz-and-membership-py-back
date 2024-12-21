@@ -3,6 +3,9 @@ import { CreatePreguntaDto } from './dto/create-pregunta.dto';
 import { UpdatePreguntaDto } from './dto/update-pregunta.dto';
 import { Pregunta } from './entities/pregunta.entity';
 import { Opcion } from 'src/opcion/entities/opcion.entity';
+import { Tema } from 'src/tema/entities/tema.entity';
+import { Subtema } from 'src/subtema/entities/subtema.entity';
+import { Modulo } from 'src/modulo/entities/modulo.entity';
 
 @Injectable()
 export class PreguntaService {
@@ -86,6 +89,41 @@ export class PreguntaService {
       throw new HttpException(error.message || 'Error al eliminar la pregunta', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async filterPreguntas(
+    modulos?: number[],
+    temas?: number[],
+    subtemas?: number[],
+    anio?: number,
+  ) {
+    const whereClause: any = {};
+    if (anio) {
+      whereClause.year = anio;
+    }
+  
+    return this.preguntaRepository.findAll({
+      include: [
+        {
+          model: Subtema,
+          where: subtemas ? { id_subtema: subtemas } : undefined,
+          include: [
+            {
+              model: Tema,
+              where: temas ? { id_tema: temas } : undefined,
+              include: [
+                {
+                  model: Modulo,
+                  where: modulos ? { id_modulo: modulos } : undefined,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      where: whereClause,
+    });
+  }
+  
 
   
 }

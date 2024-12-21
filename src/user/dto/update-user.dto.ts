@@ -39,5 +39,9 @@ export class UpdateUserDto {
 
   @IsOptional()
   @IsString()
+  avatar_img?: string;
+
+  @IsOptional()
+  @IsString()
   facultad?: string; 
 }

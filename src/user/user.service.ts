@@ -75,6 +75,7 @@ export class UserService {
         apellido: updateUserDto.apellido,
         email: updateUserDto.email,
         role: updateUserDto.role,
+        avatar_img: updateUserDto.avatar_img,
         is_approved: updateUserDto.is_approved,
         is_user_active: updateUserDto.is_user_active,
         carrera: updateUserDto.carrera,

@@ -1,4 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, UsePipes, ValidationPipe } from '@nestjs/common';
+import { 
+  Controller, 
+  Get, 
+  Post, 
+  Body, 
+  Patch, 
+  Param, 
+  Delete, 
+  HttpException, 
+  HttpStatus, 
+  UsePipes, 
+  ValidationPipe, 
+  Query 
+} from '@nestjs/common';
 import { PreguntaService } from './pregunta.service';
 import { CreatePreguntaDto } from './dto/create-pregunta.dto';
 import { UpdatePreguntaDto } from './dto/update-pregunta.dto';
@@ -35,6 +48,36 @@ export class PreguntaController {
     } catch (error) {
       console.error('Error al recuperar las preguntas:', error.message);
       throw new HttpException(error.message || 'Error al recuperar las preguntas', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('filter')
+  async filterPreguntas(
+    @Query('modulos') modulos: string,
+    @Query('temas') temas: string,
+    @Query('subtemas') subtemas: string,
+    @Query('anio') anio: number,
+  ) {
+    try {
+      const modulosArray = modulos ? modulos.split(',').map(Number) : undefined;
+      const temasArray = temas ? temas.split(',').map(Number) : undefined;
+      const subtemasArray = subtemas ? subtemas.split(',').map(Number) : undefined;
+
+      const preguntas = await this.preguntaService.filterPreguntas(
+        modulosArray,
+        temasArray,
+        subtemasArray,
+        anio,
+      );
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Preguntas filtradas exitosamente',
+        data: preguntas,
+      };
+    } catch (error) {
+      console.error('Error al filtrar las preguntas:', error.message);
+      throw new HttpException(error.message || 'Error al filtrar las preguntas', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -90,7 +133,4 @@ export class PreguntaController {
       throw new HttpException(error.message || 'Error al eliminar la pregunta', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
-  
 }
-
