@@ -119,6 +119,7 @@ export class PreguntaService {
             },
           ],
         },
+        { model: Opcion }
       ],
       where: whereClause,
     });
