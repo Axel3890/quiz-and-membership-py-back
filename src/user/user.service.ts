@@ -5,6 +5,9 @@ import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Favorito } from 'src/favorito/entities/favorito.entity';
 import { Resultado } from 'src/resultado/entities/resultado.entity';
+import { Pregunta } from 'src/pregunta/entities/pregunta.entity';
+import { Opcion } from 'src/opcion/entities/opcion.entity';
+
 
 @Injectable()
 export class UserService {
@@ -53,9 +56,19 @@ export class UserService {
 
   async findOne(id_user: number): Promise<User> {
     try {
-      const user = await this.userRepository.findByPk(id_user,{
-        include: [Favorito, Resultado],
+      const user = await this.userRepository.findByPk(id_user, {
+        include: [
+          Favorito,
+          {
+            model: Resultado,
+            include: [{
+              model: Pregunta,
+              include: [{ model: Opcion }] // Si también necesitas las opciones de cada pregunta
+            }]
+          }
+        ]
       });
+      
       if (!user) {
         console.error('Usuario no encontrado');
         throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
@@ -63,7 +76,10 @@ export class UserService {
       return user;
     } catch (error) {
       console.error('Error al recuperar el usuario:', error.message);
-      throw new HttpException(error.message || 'Error al recuperar el usuario', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        error.message || 'Error al recuperar el usuario', 
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
