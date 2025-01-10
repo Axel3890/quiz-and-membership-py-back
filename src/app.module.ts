@@ -6,7 +6,6 @@ import { TemaModule } from './tema/tema.module';
 import { SubtemaModule } from './subtema/subtema.module';
 import { UserModule } from './user/user.module';
 import { SubscripcionModule } from './subscripcion/subscripcion.module';
-import { PagoModule } from "./pagopar/pago.module"
 import { FavoritoModule } from './favorito/favorito.module';
 import { PreguntaModule } from './pregunta/pregunta.module';
 import { OpcionModule } from './opcion/opcion.module';
@@ -15,9 +14,11 @@ import { DatabaseModule } from './database/database.module';
 
 import { AuthModule } from './auth/auth.module';
 import { ComentariosModule } from './comentarios/comentarios.module';
+import { PagoModule } from './pago/pago.module';
+import { PlanModule } from './plan/plan.module';
 
 @Module({
-  imports: [ModuloModule, TemaModule, SubtemaModule, UserModule, SubscripcionModule, PagoModule, FavoritoModule, PreguntaModule, OpcionModule, ResultadoModule, DatabaseModule, AuthModule, ComentariosModule],
+  imports: [ModuloModule, TemaModule, SubtemaModule, UserModule, SubscripcionModule, PagoModule, FavoritoModule, PreguntaModule, OpcionModule, ResultadoModule, DatabaseModule, AuthModule, ComentariosModule, PlanModule],
   controllers: [AppController],
   providers: [AppService],
 })

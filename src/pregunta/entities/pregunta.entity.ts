@@ -18,9 +18,9 @@ export class Pregunta extends Model {
   @Column
   year: number;
 
-  @Column
+  @Column(DataType.TEXT)
   texto_pregunta: string;
-
+  
   @Column(DataType.TEXT)
   explicacion_correcta: string;
 
