@@ -1,6 +1,7 @@
 import { Table, Column, Model, HasMany, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
 import { Resultado } from '../../resultado/entities/resultado.entity';
 import { Favorito } from '../../favorito/entities/favorito.entity';
+import { Pago } from 'src/pago/entities/pago.entity';
 
 @Table
 export class User extends Model {
@@ -57,4 +58,8 @@ export class User extends Model {
   // Relación 1:N con Favorito
   @HasMany(() => Favorito)
   favoritos: Favorito[];
+
+  // Relación 1:N con Pago
+  @HasMany(() => Pago)
+  pagos: Pago[];
 }

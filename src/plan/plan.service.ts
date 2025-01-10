@@ -67,6 +67,7 @@ export class PlanService {
         fecha_inicio: updatePlanDto.fecha_inicio,
         fecha_fin: updatePlanDto.fecha_fin,
         precio: updatePlanDto.precio,
+        tipo_plan: updatePlanDto.tipo_plan
       });
     } catch (error) {
       console.error(`Error al actualizar el plan con ID ${id}:`, error.message);

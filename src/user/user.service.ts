@@ -7,6 +7,8 @@ import { Favorito } from 'src/favorito/entities/favorito.entity';
 import { Resultado } from 'src/resultado/entities/resultado.entity';
 import { Pregunta } from 'src/pregunta/entities/pregunta.entity';
 import { Opcion } from 'src/opcion/entities/opcion.entity';
+import { Pago } from 'src/pago/entities/pago.entity';
+import { Plan } from 'src/plan/entities/plan.entity';
 
 
 @Injectable()
@@ -65,6 +67,10 @@ export class UserService {
               model: Pregunta,
               include: [{ model: Opcion }] // Si también necesitas las opciones de cada pregunta
             }]
+          },
+          {
+            model: Pago, // Incluimos Pagos asociados al usuario
+            include: [Plan] // Incluimos Planes asociados a esos pagos
           }
         ]
       });

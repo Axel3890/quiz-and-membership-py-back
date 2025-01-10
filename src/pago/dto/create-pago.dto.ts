@@ -13,8 +13,8 @@ export class CreatePagoDto {
   @IsPositive()
   monto: number;
 
-  @IsDate()
-  fecha_pago: Date;
+  @IsString()
+  fecha_pago: string;
 
   @IsString()
   metodo_pago: string; // Ejemplo: "tarjeta", "transferencia", etc.
