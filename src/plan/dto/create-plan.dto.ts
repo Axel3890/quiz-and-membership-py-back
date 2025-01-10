@@ -9,7 +9,7 @@ export class CreatePlanDto {
 
   
   @IsString()
-  tpo_plan: string;
+  tipo_plan: string;
 
 
   @IsDateString()

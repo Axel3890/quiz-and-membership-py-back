@@ -19,6 +19,7 @@ export class PlanService {
         fecha_inicio: createPlanDto.fecha_inicio,
         fecha_fin: createPlanDto.fecha_fin,
         precio: createPlanDto.precio,
+        tipo_plan: createPlanDto.tipo_plan
       });
     } catch (error) {
       console.error('Error al crear el plan:', error.message);

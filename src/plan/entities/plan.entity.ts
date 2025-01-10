@@ -17,7 +17,7 @@ export class Plan extends Model {
     type: DataType.STRING,
     allowNull: false,
   })
-  tiipo_plan: string;
+  tipo_plan: string;
 
   @Column({
     type: DataType.TEXT, 
