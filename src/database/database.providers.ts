@@ -18,24 +18,24 @@ export const databaseProviders = [
   {
     provide: 'SEQUELIZE',
     useFactory: async () => {
-          const sequelize = new Sequelize({
-            dialect: 'postgres',  
-            host: 'localhost',
-            port: 5432,            // Puerto de PostgreSQL
-            username: 'postgres',  // usuario de PostgreSQL
-            password: 'admin',     // contraseña
-            database: 'quiz',      // Nombre de la base de datos
-          });
-
-        //  const sequelize = new Sequelize('postgres://default:qOT4PyAbK5pQ@ep-shrill-wind-a45clpvj.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require', {
-        //    dialect: 'postgres',
-        //    dialectOptions: {
-        //      ssl: {
-        //        require: true,
-        //        rejectUnauthorized: false,
-        //      }
-        //    }
+        //  const sequelize = new Sequelize({
+        //    dialect: 'postgres',  
+        //    host: 'localhost',
+        //    port: 5432,            // Puerto de PostgreSQL
+        //    username: 'postgres',  // usuario de PostgreSQL
+        //    password: 'admin',     // contraseña
+        //    database: 'quiz',      // Nombre de la base de datos
         //  });
+
+         const sequelize = new Sequelize('postgres://default:qOT4PyAbK5pQ@ep-shrill-wind-a45clpvj.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require', {
+           dialect: 'postgres',
+           dialectOptions: {
+             ssl: {
+               require: true,
+               rejectUnauthorized: false,
+             }
+           }
+         });
 
       // Agregar los modelos que quieres sincronizar
       sequelize.addModels([Modulo, Tema, Subtema, Subscripcion, Favorito, Opcion, Pregunta, Resultado, User, Comentario, Pago, Plan]);
