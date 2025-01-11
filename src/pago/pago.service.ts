@@ -4,6 +4,9 @@ import { Pago } from './entities/pago.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { UpdatePagoDto } from './dto/update-pago.dto';
 import { Inject } from '@nestjs/common';
+import { Plan } from '../plan/entities/plan.entity';
+import { User } from '../user/entities/user.entity';
+
 @Injectable()
 export class PagoService {
   constructor(
@@ -28,7 +31,16 @@ export class PagoService {
 
   async findAll(): Promise<Pago[]> {
     try {
-      return await this.pagoRepository.findAll();
+      return await this.pagoRepository.findAll({
+        include: [
+          {
+            model: Plan,
+          },
+          {
+            model: User,
+          }
+        ],
+      });
     } catch (error) {
       console.error('Error al recuperar los pagos:', error.message);
       throw new HttpException(

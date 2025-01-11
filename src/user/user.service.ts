@@ -48,7 +48,10 @@ export class UserService {
   async findAll(): Promise<User[]> {
     try {
       return await this.userRepository.findAll({
-        // include: [Favorito, Resultado],
+        include: [{
+          model: Pago, 
+          include: [Plan] 
+        }],
       });
     } catch (error) {
       console.error('Error al recuperar los usuarios:', error.message);
